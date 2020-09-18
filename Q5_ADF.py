@@ -14,7 +14,6 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in):
     data = data.drop(labels = ['yyyy-mm-dd', 'HH:MM'], axis = 1)
     data = data.drop(data.index[i])
     
-
     team1 = data.team1.unique()
     skills = np.ones(len(team1))*mu_start
     vars = np.ones(len(team1))*sigma_start
@@ -38,10 +37,10 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in):
         mu_2 = teams.loc[teams['Name'] == team2, 'skill'].iat[0]
         sigma_2 = teams.loc[teams['Name'] == team2, 'variance'].iat[0]
         t = data.loc[i, 'score1'] - data.loc[i, 'score2']
-        p = sign(mu_1-mu_2) #for Q6
         y = np.sign(t)
 
         #Check predictions for Q6
+        p = np.sign(mu_1-mu_2) #for Q6
         if(p == y):
             pred_true = pred_true + 1
         else:
