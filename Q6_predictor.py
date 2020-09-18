@@ -12,8 +12,8 @@ def predictor():
     num_samples = 300
     burn_in = 100
     pred_true, pred_false = Q5_ADF.ADF(mu_start, sigma_start, sigma_t,num_samples, burn_in)
-    print(pred_true)
-    print(pred_false)
+    r = pred_true/(pred_true + pred_false)
+    print(r)
     #flaw: player one will be predicted to win at first since both players have the same mean skill
 
 
