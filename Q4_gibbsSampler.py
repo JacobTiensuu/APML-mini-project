@@ -39,19 +39,21 @@ def gibbs_sampler(mu_1, mu_2, sigma_1, sigma_2, sigma_t, y, num_samples, burn_in
     
     return s_1, s_2, out
 
-# Test the gibbs sampler
-mu_1 = 1
-mu_2 = 1
-sigma_1 = 1
-sigma_2 = 4
-sigma_t = 5
-y = 1
-num_samples = 200
-burn_in = 100
-s1,s2,out = gibbs_sampler(mu_1, mu_2, sigma_1, sigma_2, sigma_t, y, num_samples, burn_in)
+def main():
+    # Test the gibbs sampler
+    mu_1 = 1
+    mu_2 = 1
+    sigma_1 = 1
+    sigma_2 = 4
+    sigma_t = 5
+    y = 1
+    num_samples = 200
+    burn_in = 100
+    s1,s2,out = gibbs_sampler(mu_1, mu_2, sigma_1, sigma_2, sigma_t, y, num_samples, burn_in)
 
-# Plot figure
-plt.figure(1)
-plt.plot(s1)
-plt.show()
+    # Plot figure
+    plt.figure(1)
+    plt.plot(s1)
+    plt.show()
+
         
