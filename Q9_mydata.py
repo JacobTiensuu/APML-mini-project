@@ -8,17 +8,18 @@ import Q4_gibbsSampler
 def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
 
     # Read data from csv file and remove date and time stamp and draws
-    data = pd.read_csv('SerieA.csv')
-    i = np.where(data['score1'] == data['score2'])
-
-    data = data.drop(labels = ['yyyy-mm-dd', 'HH:MM'], axis = 1)
+    data = pd.read_csv('game.csv')
+    i = np.where(data['season'] != 20182019)
     data = data.drop(data.index[i])
 
-    # Shuffle data
-    if (shuffle == 1):
-        data = data.sample(frac=1)
+    i = np.where(data['home_goals'] == data['away_goals'])
+    data = data.drop(labels = ['season', 'type', 'date_time', 'date_time_GMT', 'outcome'], axis = 1)
+    data = data.drop(data.index[i])
+
+    team_info = pd.read_csv('team_info.csv')
+    team_info = team_info.drop(labels = ['franchiseId', 'teamName', 'abbreviation', 'link'], axis = 1)
     
-    team1 = data.team1.unique()
+    team1 = data.home_team_id.unique()
     skills = np.ones(len(team1))*mu_start
     vars = np.ones(len(team1))*sigma_start
 
@@ -35,12 +36,12 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
     pred_false = 0
 
     for i in (data.index):
-        team1, team2 = data.loc[i, 'team1'], data.loc[i,'team2']
+        team1, team2 = data.loc[i, 'away_team_id'], data.loc[i,'home_team_id']
         mu_1 = teams.loc[teams['Name'] == team1, 'skill'].iat[0]
         sigma_1 = teams.loc[teams['Name'] == team1, 'variance'].iat[0]
         mu_2 = teams.loc[teams['Name'] == team2, 'skill'].iat[0]
         sigma_2 = teams.loc[teams['Name'] == team2, 'variance'].iat[0]
-        t = data.loc[i, 'score1'] - data.loc[i, 'score2']
+        t = data.loc[i, 'away_goals'] - data.loc[i, 'home_goals']
         y = np.sign(t)
 
         #Check predictions for Q6
@@ -61,21 +62,28 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
         
     # Sorting the dataframe
     teams = teams.sort_values(by='rank', ascending=False)
-    print(teams)
     
     # Plotting data
     Name = teams['Name'].to_numpy()
     rank = teams['rank'].to_numpy()
+    team_id = team_info['team_id'].to_numpy()
+    short_name = team_info['shortName'].to_numpy()
+    team_name = np.empty(len(Name), dtype = 'object')
+    
+    for i in range(len(Name)):
+        for j in range(len(team_id)):
+            if(Name[i] == team_id[j]):
+                team_name[i] = short_name[j]
+
     fig, ax = plt.subplots()
-    y_pos = np.arange(len(Name))
+    y_pos = np.arange(len(team_name))
     ax.barh(y_pos, rank, align='center')
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(Name)
+    ax.set_yticklabels(team_name)
     ax.invert_yaxis()
     ax.set_xlabel('Ranking')
     ax.set_title('Chart at the end of the season')
     plt.show()
-        
 
 
     
@@ -97,7 +105,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
