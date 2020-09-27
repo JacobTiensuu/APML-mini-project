@@ -75,6 +75,7 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
     ax.set_xlabel('Ranking')
     ax.set_title('Chart at the end of the season')
     plt.show()
+        
 
 
     
