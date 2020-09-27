@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import Q4_gibbsSampler
 
-def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
+def ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle):
 
     # Read data from csv file and remove date and time stamp and draws
     data = pd.read_csv('game.csv')
@@ -21,13 +21,13 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
     
     team1 = data.home_team_id.unique()
     skills = np.ones(len(team1))*mu_start
-    vars = np.ones(len(team1))*sigma_start
+    vars = np.ones(len(team1))*var_start
 
     # Create dataframe to represent team 
     teams = {'Name' : team1,
             'skill' : skills,
             'variance': vars,
-            'rank': skills-3*sigma_start}
+            'rank': skills-3*var_start}
 
     teams = pd.DataFrame(teams)
     
@@ -38,9 +38,9 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
     for i in (data.index):
         team1, team2 = data.loc[i, 'away_team_id'], data.loc[i,'home_team_id']
         mu_1 = teams.loc[teams['Name'] == team1, 'skill'].iat[0]
-        sigma_1 = teams.loc[teams['Name'] == team1, 'variance'].iat[0]
+        var_1 = teams.loc[teams['Name'] == team1, 'variance'].iat[0]
         mu_2 = teams.loc[teams['Name'] == team2, 'skill'].iat[0]
-        sigma_2 = teams.loc[teams['Name'] == team2, 'variance'].iat[0]
+        var_2 = teams.loc[teams['Name'] == team2, 'variance'].iat[0]
         t = data.loc[i, 'away_goals'] - data.loc[i, 'home_goals']
         y = np.sign(t)
 
@@ -51,14 +51,14 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
         else:
             pred_false = pred_false + 1
 
-        s_1, s_2, mu_1, mu_2, sigma_1, sigma_2 = Q4_gibbsSampler.gibbs_sampler(mu_1, mu_2, sigma_1, sigma_2, sigma_t, y, num_samples, burn_in)
+        s_1, s_2, mu_1, mu_2, var_1, var_2 = Q4_gibbsSampler.gibbs_sampler(mu_1, mu_2, var_1, var_2, var_t, y, num_samples, burn_in)
 
         teams.at[teams['Name']==team1,'skill'] = mu_1 
-        teams.at[teams['Name']==team1,'variance'] = sigma_1 
+        teams.at[teams['Name']==team1,'variance'] = var_1 
         teams.at[teams['Name']==team2,'skill'] = mu_2 
-        teams.at[teams['Name']==team2,'variance'] = sigma_2
-        teams.at[teams['Name']==team1, 'rank'] = mu_1-3*sigma_1
-        teams.at[teams['Name']==team2, 'rank'] = mu_2-3*sigma_2
+        teams.at[teams['Name']==team2,'variance'] = var_2
+        teams.at[teams['Name']==team1, 'rank'] = mu_1-3*var_1
+        teams.at[teams['Name']==team2, 'rank'] = mu_2-3*var_2
         
     # Sorting the dataframe
     teams = teams.sort_values(by='rank', ascending=False)
@@ -85,23 +85,16 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
     ax.set_title('Chart at the end of the season')
     plt.show()
 
-
-    
-
     return pred_true, pred_false
 
-
-
-    
 def main():
     mu_start = 20
-    sigma_start = 20/3
-    sigma_t = 1.5
+    var_start = 20/3
+    var_t = 1.5
     num_samples = 500
     burn_in = 25
     shuffle = 0
-    ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle)
-
+    ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle)
 
 if __name__ == "__main__":
     main()
