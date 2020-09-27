@@ -16,9 +16,7 @@ def gibbs_sampler(mu_1, mu_2, sigma_1, sigma_2, sigma_t, y, num_samples, burn_in
     
     # Set initial values
     s_1[0] = np.random.normal(mu_1, sigma_1)
-    s_2[0] = np.random.normal(mu_2, sigma_2)
-
- 
+    s_2[0] = np.random.normal(mu_2, sigma_2) 
     
     for i in range(burn_in+k-1):
         mu_t = s_1[i] - s_2[i]
