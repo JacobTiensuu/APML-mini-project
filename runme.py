@@ -25,20 +25,20 @@ def main():
     extension = 1
 
     # #Q 4
-    #     #Testing the sampler
-    # s1,s2, mu_1, mu_2, var_1, var_2 = Q4_gibbsSampler.gibbs_sampler(mu_start, mu_start, var_start, var_start, var_t, y, num_samples, burn_in)
-    # # Plot figure
-    # plt.figure(1)
-    # plt.plot(s1)
-    # plt.show()
+        #Testing the sampler
+    s1,s2, mu_1, mu_2, var_1, var_2 = Q4_gibbsSampler.gibbs_sampler(mu_start, mu_start, var_start, var_start, var_t, y, num_samples, burn_in)
+    # Plot figure
+    plt.figure(1)
+    plt.plot(s1)
+    plt.show()
 
     #     #Testing the burn in
-    # Q4_burn_in.burn_in(mu_start, mu_start, var_start, var_start, var_t,y,num_samples)
+    Q4_burn_in.burn_in(mu_start, mu_start, var_start, var_start, var_t,y,num_samples)
       
     
     #Q 5
     # Set home_team_adv to zero for non extened project
-    #[pred_true, pred_false] = Q5_ADF.ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension)
+    [pred_true, pred_false] = Q5_ADF.ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension)
 
     #Q 6
     Q6_predictor.predictor(mu_start, var_start, var_t,num_samples, burn_in, shuffle, extension)
