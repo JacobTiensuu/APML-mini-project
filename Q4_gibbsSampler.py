@@ -8,28 +8,26 @@ import pandas as pd
 def gibbs_sampler(mu_1, mu_2, sigma_1, sigma_2, sigma_t, y, num_samples, burn_in):
     # Number of samples k
     k = num_samples
-    
     # Storing vectors
     s_1 = np.zeros(burn_in+k)
     s_2 = np.zeros(burn_in+k)
     out = np.zeros(burn_in+k)
     
     # Set initial values
-    s_1[0] = np.random.normal(mu_1, sigma_1)
-    s_2[0] = np.random.normal(mu_2, sigma_2)
-
+    s_1[0] = np.random.normal(mu_1, np.sqrt(sigma_1))
+    s_2[0] = np.random.normal(mu_2, np.sqrt(sigma_2))
  
     
     for i in range(burn_in+k-1):
         mu_t = s_1[i] - s_2[i]
         if(y == 1):
-            a = (0-(mu_t))/sigma_t
+            a = (0-(mu_t))/np.sqrt(sigma_t)
             b = np.infty
         else:
             a = -np.infty
-            b = (0-(mu_t))/sigma_t
+            b = (0-(mu_t))/np.sqrt(sigma_t)
         # Calculate the output   
-        out[i+1] = stats.truncnorm.rvs(a,b,mu_t,sigma_t)
+        out[i+1] = stats.truncnorm.rvs(a,b,mu_t,np.sqrt(sigma_t))
         # Get sigma and Mu from the posterior to calculate the new prior
         Sigma = 1/(sigma_1+sigma_2+sigma_t)*np.matrix([[sigma_1*(sigma_2+sigma_t), sigma_1*sigma_2], \
                                                        [sigma_1*sigma_2, sigma_2*(sigma_1+sigma_t)]])

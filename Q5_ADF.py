@@ -62,9 +62,16 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
     # Plotting data
     Name = teams['Name'].to_numpy()
     rank = teams['rank'].to_numpy()
-    plt.figure(1)
-    plt.bar(Name,rank)
+    fig, ax = plt.subplots()
+    y_pos = np.arange(len(Name))
+    ax.barh(y_pos, rank, align='center')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(Name)
+    ax.invert_yaxis()
+    ax.set_xlabel('Ranking')
+    ax.set_title('Chart at the end of the season')
     plt.show()
+        
 
     # Sorting the dataframe
     teams = teams.sort_values(by='rank', ascending=False)
