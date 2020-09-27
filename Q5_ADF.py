@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import Q4_gibbsSampler
 
-def ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle):
+def ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension):
 
     # Read data from csv file and remove date and time stamp and draws
     data = pd.read_csv('SerieA.csv')
@@ -41,7 +41,13 @@ def ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle):
         mu_2 = teams.loc[teams['Name'] == team2, 'skill'].iat[0]
         var_2 = teams.loc[teams['Name'] == team2, 'variance'].iat[0]
         t = data.loc[i, 'score1'] - data.loc[i, 'score2']
-        y = np.sign(t)
+        
+        if(extension == 1):
+            home_team_adv = mu_1/60
+        else:
+            home_team_adv = 0
+
+        y = np.sign(t-home_team_adv)
 
         #Check predictions for Q6
         p = np.sign(mu_1-mu_2) #for Q6

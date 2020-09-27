@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import Q5_ADF 
 
-def predictor(mu_start, var_start, var_t, num_samples, burn_in, shuffle):
-    pred_true, pred_false = Q5_ADF.ADF(mu_start, var_start, var_t,num_samples, burn_in, shuffle)
+def predictor(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension):
+    pred_true, pred_false = Q5_ADF.ADF(mu_start, var_start, var_t,num_samples, burn_in, shuffle, extension)
     r = pred_true/(pred_true + pred_false)
     print(("Ratio of correctly predicted games\n"))
     print(r)
