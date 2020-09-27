@@ -9,7 +9,9 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
 
     # Read data from csv file and remove date and time stamp and draws
     data = pd.read_csv('game.csv')
-    data = data.drop(data.index[500:11436])
+    i = np.where(data['season'] != 20182019)
+    data = data.drop(data.index[i])
+
     i = np.where(data['home_goals'] == data['away_goals'])
     data = data.drop(labels = ['season', 'type', 'date_time', 'date_time_GMT', 'outcome'], axis = 1)
     data = data.drop(data.index[i])
@@ -72,8 +74,6 @@ def ADF(mu_start, sigma_start, sigma_t, num_samples, burn_in, shuffle):
         for j in range(len(team_id)):
             if(Name[i] == team_id[j]):
                 team_name[i] = short_name[j]
-
-    print(team_name)
 
     fig, ax = plt.subplots()
     y_pos = np.arange(len(team_name))
