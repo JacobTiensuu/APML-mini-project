@@ -8,8 +8,9 @@ import Q5_ADF
 def predictor(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension):
     pred_true, pred_false = Q5_ADF.ADF(mu_start, var_start, var_t,num_samples, burn_in, shuffle, extension)
     r = pred_true/(pred_true + pred_false)
-    print(("Ratio of correctly predicted games\n"))
+    print(("\nRatio of correctly predicted games:"))
     print(r)
+    print("\n")
     #flaw: player one will be predicted to win at first since both players have the same mean skill
 
 def main():
@@ -20,7 +21,8 @@ def main():
     num_samples = 200
     burn_in= 25
     shuffle=1
-    predictor(mu_start, var_start, var_t, num_samples, burn_in, shuffle)
+    extension=0
+    predictor(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension)
 
 if __name__ == "__main__":
     main()

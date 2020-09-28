@@ -91,7 +91,8 @@ def main():
     num_samples = 500
     burn_in = 25
     shuffle = 0
-    ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle)
+    extension=0
+    ADF(mu_start, var_start, var_t, num_samples, burn_in, shuffle, extension)
 
 
 if __name__ == "__main__":
